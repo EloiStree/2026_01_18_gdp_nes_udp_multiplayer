@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://dt58a215nis2b"]
+
+[ext_resource type="Script" uid="uid://d0ahm60pavpsa" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/example/nes_multi_character_jump_dash.gd" id="1_cyu2t"]
+[ext_resource type="Script" uid="uid://e4lhpqi312nh" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/nes_multi_player_relay_iid.gd" id="1_juq4i"]
+[ext_resource type="Script" uid="uid://dk3axv60rfjdu" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/nes_multi_int_to_nes_signal.gd" id="2_cyu2t"]
+[ext_resource type="Script" uid="uid://ksr3jvx5ae81" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/example/nes_multi_character_example.gd" id="3_ch2wm"]
+[ext_resource type="Script" uid="uid://c4oqwxvytdux4" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/example/nes_multi_character_reset_at_start_when_down.gd" id="5_ch2wm"]
+[ext_resource type="Script" uid="uid://bji3wa5v0bu6r" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/example/nes_multi_change_color.gd" id="6_o0467"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_42u0u"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o0467"]
+albedo_color = Color(0.011764706, 0, 1, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pitvh"]
+
+[node name="NesPlayerExample" type="CharacterBody3D" unique_id=738429165]
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=922287289]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.91907, 0)
+mesh = SubResource("CapsuleMesh_42u0u")
+surface_material_override/0 = SubResource("StandardMaterial3D_o0467")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1490080913]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.93530667, 0)
+shape = SubResource("CapsuleShape3D_pitvh")
+
+[node name="NesMultiCharacterJumpDash" type="Node3D" parent="." unique_id=2094728247 node_paths=PackedStringArray("rigidbody_character")]
+script = ExtResource("1_cyu2t")
+rigidbody_character = NodePath("..")
+metadata/_custom_type_script = "uid://d0ahm60pavpsa"
+
+[node name="Script" type="Node" parent="." unique_id=1789321805]
+
+[node name="NesMultiPlayerRelayIID" type="Node" parent="Script" unique_id=2027455999]
+script = ExtResource("1_juq4i")
+
+[node name="NesMultiIntToNesSignal" type="Node" parent="Script" unique_id=1218559830]
+script = ExtResource("2_cyu2t")
+
+[node name="NesMultiCharacterExample" type="Node" parent="Script" unique_id=1829868002 node_paths=PackedStringArray("rigidbody_character")]
+script = ExtResource("3_ch2wm")
+rigidbody_character = NodePath("../..")
+metadata/_custom_type_script = "uid://ksr3jvx5ae81"
+
+[node name="NesMultiCharacterResetAtStartWhenDown" type="Node" parent="Script" unique_id=1115172565 node_paths=PackedStringArray("to_move")]
+script = ExtResource("5_ch2wm")
+repop_height = -7.0
+to_move = NodePath("../..")
+metadata/_custom_type_script = "uid://c4oqwxvytdux4"
+
+[node name="NesMultiChangeColor" type="Node" parent="Script" unique_id=1388079866 node_paths=PackedStringArray("target_node_mesh")]
+script = ExtResource("6_o0467")
+target_node_mesh = NodePath("../../MeshInstance3D")
+
+[connection signal="on_value_received" from="Script/NesMultiPlayerRelayIID" to="Script/NesMultiIntToNesSignal" method="push_integer_to_event"]
+[connection signal="arrow_down_pressed" from="Script/NesMultiIntToNesSignal" to="Script/NesMultiCharacterExample" method="set_move_backward_on_off"]
+[connection signal="arrow_left_pressed" from="Script/NesMultiIntToNesSignal" to="Script/NesMultiCharacterExample" method="set_turn_left_on_off"]
+[connection signal="arrow_right_pressed" from="Script/NesMultiIntToNesSignal" to="Script/NesMultiCharacterExample" method="set_turn_right_on_off"]
+[connection signal="arrow_up_pressed" from="Script/NesMultiIntToNesSignal" to="Script/NesMultiCharacterExample" method="set_move_forward_on_off"]
+[connection signal="button_a_down" from="Script/NesMultiIntToNesSignal" to="Script/NesMultiChangeColor" method="set_color_with_inspector_value"]
+[connection signal="button_a_pressed" from="Script/NesMultiIntToNesSignal" to="Script/NesMultiCharacterExample" method="set_power_a_state"]
+[connection signal="button_b_down" from="Script/NesMultiIntToNesSignal" to="Script/NesMultiChangeColor" method="set_color_with_random_color"]
+[connection signal="button_b_pressed" from="Script/NesMultiIntToNesSignal" to="Script/NesMultiCharacterExample" method="set_power_b_state"]
+[connection signal="on_power_a_requested" from="Script/NesMultiCharacterExample" to="NesMultiCharacterJumpDash" method="jump"]
+[connection signal="on_power_b_requested" from="Script/NesMultiCharacterExample" to="NesMultiCharacterJumpDash" method="dash"]

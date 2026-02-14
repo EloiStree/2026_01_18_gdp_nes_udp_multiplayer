@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://b162ma3ycw2hw"]
+
+[ext_resource type="Script" uid="uid://c4hx86aoycb3v" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/nes_multi_listen_udp_in_iid.gd" id="1_infrk"]
+[ext_resource type="Script" uid="uid://cw58cuw7hppa2" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/nes_multi_debug_iid_to_string_event.gd" id="2_42u0u"]
+[ext_resource type="Script" uid="uid://dv07ptgo47gmx" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/nes_multi_iid_delayer_relative.gd" id="2_pitvh"]
+[ext_resource type="Script" uid="uid://b7w8e3iwhdjw2" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/nes_multi_player_lobby_broadcaster.gd" id="4_5dt23"]
+[ext_resource type="PackedScene" uid="uid://dt58a215nis2b" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/scene/element/nes_player_example.tscn" id="4_pitvh"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_42u0u"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5dt23"]
+size = Vector3(17.295258, 0.9530029, 16.835114)
+
+[node name="DemoListenToUdpToIid" type="Node" unique_id=1859906873]
+
+[node name="NesMultiListenUdpInIID" type="Node" parent="." unique_id=244989098]
+script = ExtResource("1_infrk")
+allowed_ipv4_array = []
+use_debug_print = true
+metadata/_custom_type_script = "uid://c4hx86aoycb3v"
+
+[node name="NesMultiIidDelayerRelative" type="Node" parent="NesMultiListenUdpInIID" unique_id=1707044021]
+script = ExtResource("2_pitvh")
+metadata/_custom_type_script = "uid://dv07ptgo47gmx"
+
+[node name="NesMultiDebugIidToStringEvent" type="Node" parent="NesMultiListenUdpInIID" unique_id=159712888]
+script = ExtResource("2_42u0u")
+
+[node name="Label" type="Label" parent="." unique_id=1274375706]
+anchors_preset = -1
+anchor_right = 0.296
+anchor_bottom = 0.094000004
+offset_right = -1.9920044
+offset_bottom = 1.0879974
+text = "-"
+
+[node name="Node" type="Node" parent="." unique_id=1376308474]
+
+[node name="NesMultiPlayerLobbyBroadcaster" type="Node" parent="Node" unique_id=1162771849 node_paths=PackedStringArray("parent_to_overwatch")]
+script = ExtResource("4_5dt23")
+parent_to_overwatch = NodePath("../Node3D")
+metadata/_custom_type_script = "uid://b7w8e3iwhdjw2"
+
+[node name="Node3D" type="Node3D" parent="Node" unique_id=2107012286]
+
+[node name="NesPlayerExample" parent="Node/Node3D" unique_id=738429165 instance=ExtResource("4_pitvh")]
+
+[node name="NesPlayerExample2" parent="Node/Node3D" unique_id=901182490 instance=ExtResource("4_pitvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9463027, 0, 0)
+
+[node name="NesPlayerExample3" parent="Node/Node3D" unique_id=866744362 instance=ExtResource("4_pitvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.748452, 0, 0)
+
+[node name="NesPlayerExample4" parent="Node/Node3D" unique_id=8841046 instance=ExtResource("4_pitvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0796096, 0, 0)
+
+[node name="Node3D2" type="Node3D" parent="Node" unique_id=713321458]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node/Node3D2" unique_id=1646362577]
+transform = Transform3D(17.586847, 0, 0, 0, 1, 0, 0, 0, 16.680143, 0, -0.5378849, 0)
+mesh = SubResource("BoxMesh_42u0u")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Node/Node3D2" unique_id=1832397186]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node/Node3D2/StaticBody3D" unique_id=1736384771]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -0.013320923, -0.54107666, 0.2445221)
+shape = SubResource("BoxShape3D_5dt23")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=2128777912]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 13.960367, 0.0704619)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Camera3D" unique_id=1051953338]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.4565344, 0)
+
+[connection signal="on_iid_data_received" from="NesMultiListenUdpInIID" to="NesMultiListenUdpInIID/NesMultiIidDelayerRelative" method="append_delay_iid_data"]
+[connection signal="on_ready_to_be_executed" from="NesMultiListenUdpInIID/NesMultiIidDelayerRelative" to="NesMultiListenUdpInIID/NesMultiDebugIidToStringEvent" method="push_in_iid_data"]
+[connection signal="on_ready_to_be_executed" from="NesMultiListenUdpInIID/NesMultiIidDelayerRelative" to="Node/NesMultiPlayerLobbyBroadcaster" method="push_command_iid_to_player"]
+[connection signal="on_iid_string_received" from="NesMultiListenUdpInIID/NesMultiDebugIidToStringEvent" to="Label" method="set_text"]
