@@ -16,3 +16,4 @@ I wrote this code for a workshop in Unity, and I like the concept of using it as
 [https://github.com/EloiStree/2026_01_18_upm_nes_udp_multiplayer](https://github.com/EloiStree/2026_01_18_upm_nes_udp_multiplayer)
 
 I need to recreate the same code in Godot.
+<img width="1146" height="670" alt="image" src="https://github.com/user-attachments/assets/ae460331-0311-4fad-8351-718c669144a5" />
