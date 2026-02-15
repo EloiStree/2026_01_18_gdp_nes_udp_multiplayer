@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://dv07ptgo47gmx" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/nes_multi_iid_delayer_relative.gd" id="2_pitvh"]
 [ext_resource type="Script" uid="uid://b7w8e3iwhdjw2" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/nes_multi_player_lobby_broadcaster.gd" id="4_5dt23"]
 [ext_resource type="PackedScene" uid="uid://dt58a215nis2b" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/scene/element/nes_player_example.tscn" id="4_pitvh"]
+[ext_resource type="Script" uid="uid://166a4h57h6k6" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/nes_multi_display_ipv4_list.gd" id="6_8flm2"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_42u0u"]
 
@@ -72,7 +73,44 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Camera3D" unique_id=1051953338]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.4565344, 0)
 
+[node name="Panel" type="Panel" parent="." unique_id=1694147394]
+anchors_preset = -1
+anchor_top = 0.934
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelIP" type="Label" parent="Panel" unique_id=397866978]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "127.0.0.1"
+vertical_alignment = 1
+
+[node name="Node" type="Node" parent="Panel/LabelIP" unique_id=583877228]
+script = ExtResource("6_8flm2")
+text_join = " - "
+
+[node name="LabelPort" type="Label" parent="Panel" unique_id=1015674580]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "3615"
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [connection signal="on_iid_data_received" from="NesMultiListenUdpInIID" to="NesMultiListenUdpInIID/NesMultiIidDelayerRelative" method="append_delay_iid_data"]
 [connection signal="on_ready_to_be_executed" from="NesMultiListenUdpInIID/NesMultiIidDelayerRelative" to="NesMultiListenUdpInIID/NesMultiDebugIidToStringEvent" method="push_in_iid_data"]
 [connection signal="on_ready_to_be_executed" from="NesMultiListenUdpInIID/NesMultiIidDelayerRelative" to="Node/NesMultiPlayerLobbyBroadcaster" method="push_command_iid_to_player"]
 [connection signal="on_iid_string_received" from="NesMultiListenUdpInIID/NesMultiDebugIidToStringEvent" to="Label" method="set_text"]
+[connection signal="on_refresh_ipv4_debug_text" from="Panel/LabelIP/Node" to="Panel/LabelIP" method="set_text"]
