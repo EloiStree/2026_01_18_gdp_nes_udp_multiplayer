@@ -15,8 +15,11 @@ signal menu_right_pressed(pressed: bool)
 signal button_a_pressed(pressed: bool)
 signal button_b_pressed(pressed: bool)
 
-signal button_a_down(pressed: bool)
-signal button_b_down(pressed: bool)
+signal button_a_down()
+signal button_b_down()
+signal button_a_up()
+signal button_b_up()
+
 
 
 
@@ -101,6 +104,11 @@ func _process_button(value: int, array: Array[int], sig: Signal) -> void:
 			button_b_down.emit()
 	elif is_in_command_release(value, array):
 		sig.emit(false)
+		if sig==button_a_pressed:
+			button_a_up.emit()
+		if sig==button_b_pressed:
+			button_b_up.emit()
+		
 	
 	
 

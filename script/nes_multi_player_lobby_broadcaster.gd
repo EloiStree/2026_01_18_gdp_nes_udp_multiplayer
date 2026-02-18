@@ -17,14 +17,17 @@ func _ready() -> void:
 		override_index_of_player_with_found_order()
 
 func push_command_iid_to_player(index: int, value: int,date:int) -> void:
+	
 	for player in players_found:
-		if player.is_index(index):
-			player.push_command_iid_to_player(index, value , date)
+		if player !=null:
+			if player.is_index(index):
+				player.push_command_iid_to_player(index, value , date)
 
 func push_command_ii_to_player(index: int, value: int) -> void:
 	for player in players_found:
-		if player.is_index(index):
-			player.push_command_iid_to_player(index, value,0)
+		if player !=null:
+			if player.is_index(index):
+				player.push_command_iid_to_player(index, value,0)
 
 
 func override_index_of_player_with_found_order() -> void:
