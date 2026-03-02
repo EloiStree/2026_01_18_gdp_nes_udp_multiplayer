@@ -16,7 +16,6 @@ func get_ipv4_addresses() -> PackedStringArray:
 		# Skip loopback if you don’t want 127.0.0.1
 		if "." in ip and not ip.begins_with("127."):
 			result.append(ip)
-	
 	return result
 
 func refresh():

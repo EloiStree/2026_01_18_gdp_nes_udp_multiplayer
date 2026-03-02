@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://c6fvcmrmjdmqa"]
+
+[ext_resource type="Script" uid="uid://cckxqga583u5x" path="res://addons/2026_01_18_gdp_nes_udp_multiplayer/script/example/nes_multi_arrow_line_move.gd" id="1_4xs1r"]
+[ext_resource type="Texture2D" uid="uid://ds04rja4adt5n" path="res://addons/2026_02_19_gdp_nes_int_multi_brackeys_2d/from_web/single_arrow.png" id="2_ci7q8"]
+[ext_resource type="Script" uid="uid://yoqbjj36ki0f" path="res://addons/2026_02_19_gdp_nes_int_multi_brackeys_2d/tower_fall_like/script/tower_nes_attacker_zone_tag.gd" id="3_358fe"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ci7q8"]
+radius = 2.0
+
+[node name="NesMultiElementArrowLineMove" type="Node2D" unique_id=309894851]
+script = ExtResource("1_4xs1r")
+speed = 320.0
+lifetime = 3.0
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=548102266]
+rotation = 2.3514748
+texture = ExtResource("2_ci7q8")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=359012735]
+disable_mode = 2
+collision_layer = 15
+collision_mask = 15
+script = ExtResource("3_358fe")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1354411444]
+light_mask = 3
+position = Vector2(6, 0)
+shape = SubResource("CircleShape2D_ci7q8")
+
+[connection signal="body_entered" from="Area2D" to="." method="queue_free" unbinds=1]
